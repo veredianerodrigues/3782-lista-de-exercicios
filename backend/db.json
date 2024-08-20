@@ -1,0 +1,24 @@
+{
+  "filmes": [
+    {
+      "id": "1003",
+      "nome": "Evil Dead",
+      "genero": "Terror"
+    },
+    {
+      "id": "1004",
+      "nome": "Forrest Gump",
+      "genero": "Drama"
+    },
+    {
+      "id": "fa0b",
+      "nome": "Matrix",
+      "genero": "Ficção Científica"
+    },
+    {
+      "id": "4107",
+      "nome": "O cavaleiro das trevas",
+      "genero": "Ação"
+    }
+  ]
+}
