@@ -1,6 +1,7 @@
 :root{
   margin:0;
   padding:0;
+  box-sizing: border-box;
 }
 
 body {
@@ -17,6 +18,8 @@ body {
 }
 
 #lista-filmes {
+  width: 80vw;
+  flex-wrap: wrap;
   list-style: none;
   display: flex;
   align-items: center;
