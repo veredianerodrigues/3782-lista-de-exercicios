@@ -1,34 +1,61 @@
-import ui from "./ui.js"
-import api from "./api.js"
+// main.js
+import ui from './ui.js';
+import api from './api.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  ui.renderizarFilmes()
+document.addEventListener('DOMContentLoaded', init);
 
-  const formularioFilme = document.getElementById("filme-form")
-  const botaoCancelar = document.getElementById("botao-cancelar")
+async function init() {
+  document.getElementById('filme-form')
+    .addEventListener('submit', manipularSubmissaoFormulario);
+  document.getElementById('botao-cancelar')
+    .addEventListener('click', manipularCancelamento);
+  document.getElementById('campo-busca')
+    .addEventListener('input', manipularBusca);
 
-  formularioFilme.addEventListener("submit", manipularSubmissaoFormulario)
-  botaoCancelar.addEventListener("click", manipularCancelamento)
-})
+  await carregarEExibirFilmes();
+}
+
+async function carregarEExibirFilmes() {
+  try {
+    const filmes = await api.buscarFilmes();
+    ui.renderizarFilmes(filmes);
+  } catch (error) {
+    alert('Erro ao carregar filmes');
+    console.error(error);
+  }
+}
 
 async function manipularSubmissaoFormulario(event) {
-  event.preventDefault()
-  const id = document.getElementById("filme-id").value
-  const nome = document.getElementById("filme-nome").value
-  const genero = document.getElementById("filme-genero").value
+  event.preventDefault();
+  const id    = document.getElementById('filme-id').value;
+  const title = document.getElementById('filme-title').value;
+  const year  = Number(document.getElementById('filme-year').value);
 
   try {
     if (id) {
-      await api.editarFilme({ id, nome, genero })
+      await api.editarFilme({ id: Number(id), title, year });
     } else {
-      await api.salvarFilme({ nome, genero })
+      await api.salvarFilme({ title, year });
     }
-    ui.renderizarFilmes()
-  } catch {
-    alert("Erro ao salvar filme")
+    ui.limparFormulario();
+    await carregarEExibirFilmes();
+  } catch (error) {
+    alert('Erro ao salvar filme');
+    console.error(error);
   }
 }
 
 function manipularCancelamento() {
-  ui.limparFormulario()
+  ui.limparFormulario();
+}
+
+async function manipularBusca() {
+  const termo = document.getElementById('campo-busca').value;
+  try {
+    const filtrados = await api.buscarFilmesPorTermo(termo);
+    ui.renderizarFilmes(filtrados);
+  } catch (error) {
+    alert('Erro ao realizar busca');
+    console.error(error);
+  }
 }
